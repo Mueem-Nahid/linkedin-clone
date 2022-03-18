@@ -7,7 +7,7 @@ import { MdBusinessCenter } from "react-icons/md";
 import { MdArrowForwardIos } from "react-icons/md";
 import HeaderLink from '../components/HeaderLink';
 import Head from 'next/head';
-import { getProviders } from 'next-auth/react';
+import { getProviders, signIn } from 'next-auth/react';
 
 function Home({ providers }) {
     console.log(providers)
@@ -31,9 +31,17 @@ function Home({ providers }) {
                         <HeaderLink icon={<MdOndemandVideo size={25} />} text="Learning"></HeaderLink>
                         <HeaderLink icon={<MdBusinessCenter size={25} />} text="Jobs"></HeaderLink>
                     </div>
-                    <div className='pl-4'>
-                        <button className='text-blue-700 font-semibold rounded-full border border-blue-700 px-5 py-1.5 transition-all hover:border-2'>Sign in</button>
-                    </div>
+
+                    {
+                        Object.values(providers).map((provider) => (
+                            <div key={provider?.id}>
+                                <div className='pl-4'>
+                                    <button className='text-blue-700 font-semibold rounded-full border border-blue-700 px-5 py-1.5 transition-all hover:border-2'
+                                        onClick={() => signIn(provider?.id, { callbackUrl: "/" })}>Sign in</button>
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </header>
 
@@ -76,6 +84,4 @@ export async function getServerSideProps(ctx) {
     }
 }
 
-// time: 2:00:00
-// linked-in-db
-// 6GtCfn3cawT50X4j
+// time: 2:11:00

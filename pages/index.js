@@ -1,5 +1,5 @@
 import Head from 'next/head'
-
+import { signOut } from 'next-auth/react';
 export default function Home() {
   return (
     <div>
@@ -10,7 +10,7 @@ export default function Home() {
       </Head>
 
       <h1>LinkedIn</h1>
-
+      <button onClick={signOut}>Sign out</button>
     </div>
   )
 }
