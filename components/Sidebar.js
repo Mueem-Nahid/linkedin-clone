@@ -1,8 +1,13 @@
 import Image from 'next/image'
 import React from 'react'
 import { FaBookmark } from "react-icons/fa"
+import { AiOutlinePlus } from "react-icons/ai"
+import { useSession } from 'next-auth/react';
 
 export default function Sidebar() {
+    const { data: session } = useSession(); //renaming data to session
+    console.log("->Session: ", session)
+
     return (
         <div className='space-y-2 min-w-max max-w-lg'>
             {/* top */}
@@ -13,13 +18,13 @@ export default function Sidebar() {
                 {/* avatar */}
                 <div className='w-14 h-14 border-2 overflow-hidden absolute top-4 cursor-pointer rounded-full'>
                     <Image
-                        src="https://i.ibb.co/5LN7z9Z/placeholder-icon.png"
+                        src={session?.user?.image}
                         alt="sidebar placeholder icon" layout='fill'
                     />
                 </div>
                 <div className='mt-4 py-4 space-x-0.5'>
-                    <h4 className='hover:underline decoration-purple-700 underline-offset-1 cursor-pointer'>Mueem</h4>
-                    <p className='text-black/60 dark:text-white/75 text-sm'>mueem@gmail.com</p>
+                    <h4 className='hover:underline decoration-purple-700 underline-offset-1 cursor-pointer'>{session?.user?.name}</h4>
+                    <p className='text-black/60 dark:text-white/75 text-sm'>{session?.user?.email}</p>
                 </div>
                 <div className='hidden md:inline text-left dark:text-white/75 text-sm'>
                     <div className='font-medium sidebarButton space-y-0.5'>
@@ -49,6 +54,17 @@ export default function Sidebar() {
                 </div>
             </div>
             {/* bottom */}
+            <div className='hidden md:flex bg-white dark:bg-[#1D2226] text-black/70 dark:text-white/75 rounded-lg overflow-hidden flex-col space-y-2 pt-2.5 sticky top-20 border border-gray-300 dark:border-none'>
+                <p className='sidebarLink'>Groups</p>
+                <div className='flex items-center justify-between'>
+                    <p className='sidebarLink'>Events</p>
+                    <AiOutlinePlus />
+                </div>
+                <p className='sidebarLink'>Followed Hashtags</p>
+                <div className='sidebarButton text-center'>
+                    <h4 className='dark:text-white font-medium text-sm'>Discover More</h4>
+                </div>
+            </div>
         </div>
     )
 }

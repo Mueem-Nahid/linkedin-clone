@@ -1,7 +1,22 @@
+import { getSession, useSession } from 'next-auth/react';
 import Head from 'next/head'
+import { useRouter } from 'next/router';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
+
 export default function Home() {
+  const router = useRouter(); //useRouter for client side, redirect for server
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      // The user is not authenticated, handle it here.
+      router.push('/home')
+    },
+  })
+  if (status === "loading") {
+    return "Loading or not authenticated..."
+  }
+
   return (
     <div className='bg-[#F3F2EF] dark:bg-black dark:text-white h-screen overflow-y-scroll md:space-y-6'>
       <Head>
@@ -23,4 +38,22 @@ export default function Home() {
       </main>
     </div>
   )
+}
+
+export async function getServerSideProps(ctx) {
+  // if the user authenticated in the server
+  const session = await getSession(ctx);
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/home',
+      }
+    }
+  }
+  return {
+    props: {
+      session,
+    }
+  }
 }
