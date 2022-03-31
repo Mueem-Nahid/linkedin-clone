@@ -1,6 +1,7 @@
 import { getSession, useSession } from 'next-auth/react';
 import Head from 'next/head'
 import { useRouter } from 'next/router';
+import Feed from '../components/Feed';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 
@@ -32,6 +33,7 @@ export default function Home() {
           {/* sidebar */}
           <Sidebar />
           {/* feed */}
+          <Feed />
         </div>
 
         {/* widgets */}

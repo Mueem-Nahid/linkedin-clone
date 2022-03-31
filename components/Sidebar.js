@@ -2,7 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import { FaBookmark } from "react-icons/fa"
 import { AiOutlinePlus } from "react-icons/ai"
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Sidebar() {
     const { data: session } = useSession(); //renaming data to session
@@ -16,7 +16,7 @@ export default function Sidebar() {
                     <Image src="https://i.ibb.co/HVkhBwk/Linked-In-Default-Background.webp" layout="fill" priority />
                 </div>
                 {/* avatar */}
-                <div className='w-14 h-14 border-2 overflow-hidden absolute top-4 cursor-pointer rounded-full'>
+                <div className='w-14 h-14 border-2 overflow-hidden absolute top-4 cursor-pointer rounded-full' onClick={signOut}>
                     <Image
                         src={session?.user?.image}
                         alt="sidebar placeholder icon" layout='fill'
