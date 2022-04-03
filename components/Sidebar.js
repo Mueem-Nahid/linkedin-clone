@@ -58,7 +58,7 @@ export default function Sidebar() {
                 <p className='sidebarLink'>Groups</p>
                 <div className='flex items-center justify-between'>
                     <p className='sidebarLink'>Events</p>
-                    <AiOutlinePlus />
+                    <AiOutlinePlus className='m-1' />
                 </div>
                 <p className='sidebarLink'>Followed Hashtags</p>
                 <div className='sidebarButton text-center'>
