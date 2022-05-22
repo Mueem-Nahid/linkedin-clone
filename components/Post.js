@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { MdOutlineClose, MdOutlineMoreHoriz } from "react-icons/md"
+import { MdOutlineClose, MdOutlineMoreHoriz, MdDelete, MdOutlineInsertComment } from "react-icons/md"
+import { BiLike } from "react-icons/bi"
 import { modalState, modalTypeState } from '../atoms/modalAtom'
 import { useRecoilState } from 'recoil';
 import { getPostState } from '../atoms/postAtom';
+import { useSession } from 'next-auth/react'
+import TimeAgo from 'timeago-react'
 
 export default function Post({ post, modalPost }) {
-   console.log('modal post:', modalPost)
+   const { data: session } = useSession()
    const [modalOpen, setModalOpen] = useRecoilState(modalState);
    const [modalType, setModalType] = useRecoilState(modalTypeState);
    const [postState, setPostState] = useRecoilState(getPostState);
    const [showInput, setShowInput] = useState(false)
+   const [liked, setLiked] = useState(false)
 
    // truncate function
    const truncate = (string, n) =>
@@ -21,6 +25,10 @@ export default function Post({ post, modalPost }) {
       setModalOpen(true);
       setModalType('gifYouUp');
       setPostState(post);
+   }
+
+   const deletePost = () => {
+
    }
 
    return (
@@ -37,6 +45,7 @@ export default function Post({ post, modalPost }) {
                <h6 className='font-medium hover:text-blue-500 hover:underline'>{post?.username}</h6>
                <p className='text-sm dark:text-white/75 opacity-80'>{post?.email}</p>
                {/* timeago  stamp */}
+               <TimeAgo datetime={post?.createdAt} className='text-xs dark:text-white/75 opacity-80'></TimeAgo>
             </div>
             {
                modalPost ? (
@@ -50,25 +59,53 @@ export default function Post({ post, modalPost }) {
                )
             }
          </div>
-         <div className=''>
+         {
+            post?.input && (
+               <div className={`px-2.5 break-all md:break-normal`}>
+                  {modalPost || showInput ? (
+                     <p onClick={() => setShowInput(false)}>{post?.input}</p>
+                  ) : (
+                     <p onClick={() => setShowInput(true)}>{truncate(post?.input, 150)}</p>
+                  )}
+               </div>
+            )
+         }
+         {
+            post?.photoUrl && !modalPost && (
+               <img src={post.photoUrl} alt="post image" onClick={handleOpenPost} className='w-full cursor-pointer' />
+               // <div className='w-full h-96 cursor-pointer relative'>
+               //    <Image src={post?.photoUrl}
+               //       alt="post image" layout='fill' />
+               // </div>
+            )
+         }
+         <div className='flex justify-evenly items-center dark:border-t border-gray-600/80 mx-2.5 pt-2 text-black/60 dark:text-white/75'>
             {
-               post?.input && (
-                  <div className={`px-2.5 break-all md:break-normal`}>
-                     {modalPost || showInput ? (
-                        <p onClick={() => setShowInput(false)}>{post?.input}</p>
-                     ) : (
-                        <p onClick={() => setShowInput(true)}>{truncate(post?.input, 150)}</p>
-                     )}
-                  </div>
+               modalPost ? (
+                  <button className='postButton'><MdOutlineInsertComment size={25} /><h4>Comment</h4></button>
+               ) : (
+                  <button className={`postButton ${liked && 'text-blue-500'}`} onClick={() => setLiked(!liked)}>
+                     {
+                        liked ? (
+                           <BiLike size={25} className='-scale-x-100' />
+                        ) : (
+                           <BiLike size={25} className='-scale-x-100' />
+                        )
+                     }
+                     <h4>Like</h4>
+                  </button>
                )
             }
             {
-               post?.photoUrl && !modalPost && (
-                  <img src={post.photoUrl} alt="post image" onClick={handleOpenPost} className='w-full cursor-pointer' />
-                  // <div className='w-full h-96 cursor-pointer relative'>
-                  //    <Image src={post?.photoUrl}
-                  //       alt="post image" layout='fill' />
-                  // </div>
+               session?.user?.email === post.email ? (
+                  <button className='postButton focus:text-red-400' onClick={deletePost}>
+                     <MdDelete size={25} />
+                     <h4>Delete post</h4>
+                  </button>
+               ) : (
+                  <button className='postButton'>
+                     <h4>Share</h4>
+                  </button>
                )
             }
          </div>
