@@ -4,7 +4,7 @@ import { MdOutlineClose, MdOutlineMoreHoriz, MdDelete, MdOutlineInsertComment } 
 import { BiLike } from "react-icons/bi"
 import { modalState, modalTypeState } from '../atoms/modalAtom'
 import { useRecoilState } from 'recoil';
-import { getPostState } from '../atoms/postAtom';
+import { getPostState, handlePostState } from '../atoms/postAtom';
 import { useSession } from 'next-auth/react'
 import TimeAgo from 'timeago-react'
 
@@ -15,6 +15,7 @@ export default function Post({ post, modalPost }) {
    const [postState, setPostState] = useRecoilState(getPostState);
    const [showInput, setShowInput] = useState(false)
    const [liked, setLiked] = useState(false)
+   const [handlePost, setHandlePost] = useRecoilState(handlePostState)
 
    // truncate function
    const truncate = (string, n) =>
@@ -27,8 +28,13 @@ export default function Post({ post, modalPost }) {
       setPostState(post);
    }
 
-   const deletePost = () => {
-
+   const deletePost = async () => {
+      const response = await fetch(`/api/posts/${post._id}`, {
+         method: 'DELETE',
+         headers: { 'Content-Type': 'application/json' },
+      });
+      setHandlePost(true);
+      setModalOpen(false);
    }
 
    return (
