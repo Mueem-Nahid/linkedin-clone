@@ -8,9 +8,10 @@ import Feed from '../components/Feed';
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 import Sidebar from '../components/Sidebar';
+import Widgets from '../components/Widgets';
 import { connectToDatabase } from '../utils/mongodb';
 
-export default function Home({ posts }) {
+export default function Home({ posts, articles }) {
     const [modalOpen, setModalOpen] = useRecoilState(modalState);
     const [modalType, setModalType] = useRecoilState(modalTypeState);
     const router = useRouter(); //useRouter for client side, redirect for server
@@ -44,6 +45,8 @@ export default function Home({ posts }) {
                 </div>
 
                 {/* widgets */}
+                <Widgets articles={articles} />
+
                 <AnimatePresence>
                     {modalOpen && (
                         <Modal handleClose={() => setModalOpen(false)} type={modalType} />
@@ -68,11 +71,15 @@ export async function getServerSideProps(ctx) {
     // get posts on SSR
     const { db } = await connectToDatabase();
     const posts = await db.collection('posts').find().sort({ timeStamp: -1 }).toArray();
-    // get google news API
 
+    // get google news API
+    const newsApiResult = await fetch(process.env.NEWS_API_URL + process.env.NEWS_API_KEY)
+        .then(res => res.json());
+    
     return {
         props: {
             session,
+            articles: newsApiResult?.articles,
             posts: posts.map(({ _id, input, photoUrl, userImg, username, email, createdAt }) => ({
                 _id: _id.toString(),
                 input: input,

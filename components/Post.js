@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
+import { IoMdShareAlt } from "react-icons/io"
 import { MdOutlineClose, MdOutlineMoreHoriz, MdDelete, MdOutlineInsertComment } from "react-icons/md"
 import { BiLike } from "react-icons/bi"
 import { modalState, modalTypeState } from '../atoms/modalAtom'
 import { useRecoilState } from 'recoil';
-import { getPostState, handlePostState } from '../atoms/postAtom';
+import { getPostState, handlePostState } from '../atoms/postAtom'
 import { useSession } from 'next-auth/react'
 import TimeAgo from 'timeago-react'
 
@@ -110,6 +111,7 @@ export default function Post({ post, modalPost }) {
                   </button>
                ) : (
                   <button className='postButton'>
+                     <IoMdShareAlt size={25} />
                      <h4>Share</h4>
                   </button>
                )
