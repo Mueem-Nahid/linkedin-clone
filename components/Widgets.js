@@ -1,6 +1,7 @@
 import React from 'react'
 import TimeAgo from 'timeago-react'
 import { BsInfoCircleFill, BsFillRecordFill } from "react-icons/bs"
+import Image from 'next/image'
 
 export default function Widgets({ articles }) {
 
@@ -25,6 +26,11 @@ export default function Widgets({ articles }) {
         </div>
       </div>
       {/* Ads */}
+      <div className='bg-white dark:bg-[#1D2226] w-11/12 h-64 px-2.5 rounded-lg sticky top-20 border border-gray-300 dark:border-none'>
+        <div className='relative w-full h-full'>
+          <Image src='https://i.ibb.co/HVvvGpz/add-background.jpg' layout='fill' objectFit='contain' priority />
+        </div>
+      </div>
     </div>
   )
 }
