@@ -24,8 +24,6 @@ export default function Header() {
         setMounted(true);
     }, []);
 
-    console.log(theme)
-
     return (
         <header className='sticky top-0 z-40 bg-white dark:bg-[#1D2226] flex items-center justify-around py-1.5 px-3 focus-within:shadow-lg'>
             {/* left section */}

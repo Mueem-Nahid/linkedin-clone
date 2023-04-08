@@ -29,7 +29,6 @@ export default function Form() {
             }
         });
         const responseData = await response.json();
-        console.log("This is response: ", responseData);
         setHandlePost(true);
         setModalOpen(false);
     }

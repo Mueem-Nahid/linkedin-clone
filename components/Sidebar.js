@@ -6,7 +6,6 @@ import { useSession, signOut } from 'next-auth/react';
 
 export default function Sidebar() {
     const { data: session } = useSession(); //renaming data to session
-    console.log("->Session: ", session)
 
     return (
         <div className='space-y-2 min-w-max max-w-lg'>
